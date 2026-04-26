@@ -7,8 +7,8 @@ function AddItemPage() {
 
   const handleCreate = async (formData) => {
     try {
-      await createItem(formData);
-      navigate("/");
+      await createItem(formData); // Call the API to create the item
+      navigate("/"); // Navigate back to the home page after success
     } catch (error) {
       console.error("Failed to create item", error);
       alert("Failed to create item");

@@ -1,5 +1,6 @@
-import Item from "../models/Item.js";
+import Item from "../models/item.js";
 
+// Get all items
 export const getItems = async (req, res) => {
   try {
     const items = await Item.find().sort({ createdAt: -1 });
@@ -9,6 +10,7 @@ export const getItems = async (req, res) => {
   }
 };
 
+// Get item by ID
 export const getItemById = async (req, res) => {
   try {
     const item = await Item.findById(req.params.id);
@@ -23,9 +25,18 @@ export const getItemById = async (req, res) => {
   }
 };
 
+// Create a new item
 export const createItem = async (req, res) => {
   try {
-    const newItem = await Item.create(req.body);
+    const { name, brandName, category, price, description, imageUrl } = req.body;
+    const newItem = await Item.create({
+      name,
+      brandName,
+      category,
+      price,
+      description,
+      imageUrl,
+    });
     res.status(201).json(newItem);
   } catch (error) {
     res.status(400).json({
@@ -35,12 +46,14 @@ export const createItem = async (req, res) => {
   }
 };
 
+// Update an existing item
 export const updateItem = async (req, res) => {
   try {
-    const updatedItem = await Item.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const updatedItem = await Item.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
 
     if (!updatedItem) {
       return res.status(404).json({ message: "Item not found" });
@@ -55,6 +68,7 @@ export const updateItem = async (req, res) => {
   }
 };
 
+// Delete an item
 export const deleteItem = async (req, res) => {
   try {
     const deletedItem = await Item.findByIdAndDelete(req.params.id);

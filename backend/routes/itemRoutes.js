@@ -5,7 +5,7 @@ import {
   getItemById,
   getItems,
   updateItem,
-} from "../controller/itemController.js"; // Corrected "controller" (singular)
+} from "../controller/itemController.js";
 
 const router = express.Router();
 

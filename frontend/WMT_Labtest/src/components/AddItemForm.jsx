@@ -1,16 +1,29 @@
 import React, { useState } from "react";
+import axios from "axios";
 
-function ItemForm({ submitText, onSubmit, initialData = {} }) {
-  const [name, setName] = useState(initialData.name || "");
-  const [brandName, setBrandName] = useState(initialData.brandName || "");
-  const [category, setCategory] = useState(initialData.category || "");
-  const [price, setPrice] = useState(initialData.price || "");
-  const [description, setDescription] = useState(initialData.description || "");
-  const [imageUrl, setImageUrl] = useState(initialData.imageUrl || "");
+const AddItemForm = ({ onItemAdded }) => {
+  const [name, setName] = useState("");
+  const [brandName, setBrandName] = useState("");
+  const [category, setCategory] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit({ name, brandName, category, price, description, imageUrl });
+    try {
+      const newItem = { name, brandName, category, price, description, imageUrl };
+      const response = await axios.post("/api/items", newItem);
+      onItemAdded(response.data);
+      setName("");
+      setBrandName("");
+      setCategory("");
+      setPrice("");
+      setDescription("");
+      setImageUrl("");
+    } catch (error) {
+      console.error("Failed to add item:", error);
+    }
   };
 
   return (
@@ -55,9 +68,9 @@ function ItemForm({ submitText, onSubmit, initialData = {} }) {
         value={imageUrl}
         onChange={(e) => setImageUrl(e.target.value)}
       />
-      <button type="submit">{submitText}</button>
+      <button type="submit">Add Item</button>
     </form>
   );
-}
+};
 
-export default ItemForm;
+export default AddItemForm;
